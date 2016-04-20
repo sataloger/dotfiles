@@ -28,6 +28,7 @@
 [core]
     whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
     editor = vim 
+    autoclrf = true
 
 [alias]
     co = checkout
@@ -43,7 +44,7 @@
     ls = ls-files
     lg = log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
     dta = !sh -c 'git tag -a \"$1\" -m \"`date +"%d.%m"`\"' -
-    dtl = !sh -c 'git tag | grep -P \"^\\d\" | sort -rn -t. -k1,1 -k2,1 -k3,1 | head -n1' -
+    dtl = !sh -c 'git tag -l --sort=-version:refname | grep -P \"^\\d\" | head -n1' - # WARNING: git-tag ref sort introduced in git 2.0
     dtd = !sh -c 'git log $1..$2 --oneline | egrep -o \"\\w+-[0-9]+\" | sort | uniq' -
     done =  !sh -c 'git dtd `git dtl`' -
     change = !sh -c 'git diff `git dtl` --name-only'
