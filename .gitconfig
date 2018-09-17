@@ -32,7 +32,7 @@
 
 [alias]
     co = checkout
-    ci = commit
+    ci = commit -S
     up = remote update
     st = status
     stat = status
@@ -43,12 +43,17 @@
     ph = push --tags
     ls = ls-files
     lg = log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
-    dta = !sh -c 'git tag -a \"$1\" -m \"`date +"%d.%m"`\"' -
+    dta = !sh -c 'git tag -s -a \"$1\" -m \"`date +"%d.%m"`\"' -
     dtl = !sh -c 'git tag -l --sort=-version:refname | grep -P \"^\\d\" | head -n1' - # WARNING: git-tag ref sort introduced in git 2.0
     dtd = !sh -c 'git log $1..$2 --oneline | egrep -o \"\\w+-[0-9]+\" | sort | uniq' -
     done =  !sh -c 'git dtd `git dtl`' -
     change = !sh -c 'git diff `git dtl` --name-only'
- 
+    # git fetch -p && for branch in `git branch -vv | grep ': gone]' | awk '{print $1}'`; do git branch -D $branch; done
+
+    # by some reason I can't escape awk, so do that via shell function
+    clear = "!git_clear_branches() { \
+         git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -D;\
+       }; git_clear_branches"
 [merge]
     tool = vimdiff
 
